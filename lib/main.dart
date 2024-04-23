@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:webpaint/widgets/toolbar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,12 +27,17 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomPaint(
-        painter: DemoPainter(Colors.green),
-        willChange: true,
-        child: const SizedBox.square(
-          dimension: 200.0,
-        ),
+      body: Column(
+        children: [
+          CustomPaint(
+            painter: DemoPainter(Colors.green),
+            willChange: true,
+            child: const SizedBox.square(
+              dimension: 200.0,
+            ),
+          ),
+          const ToolBar(),
+        ],
       ),
     );
   }
