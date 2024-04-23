@@ -15,19 +15,31 @@ class _ToolBarState extends State<ToolBar> {
   @override
   Widget build(BuildContext context) {
     return SegmentedButton<Tools>(
+        showSelectedIcon: false,
         segments: const [
           ButtonSegment(
             value: Tools.pointer,
-            icon: Icon(Icons.navigate_before),
+            icon: Icon(Icons.navigation),
           ),
           ButtonSegment(
             value: Tools.line,
-            icon: Icon(Icons.line_axis),
+            icon: Icon(Icons.horizontal_rule),
           ),
+          ButtonSegment(
+            value: Tools.square,
+            icon: Icon(Icons.crop_square),
+          ),
+          ButtonSegment(
+            value: Tools.circle,
+            icon: Icon(Icons.circle_outlined),
+          ),
+          ButtonSegment(
+            value: Tools.pencil,
+            icon: Icon(Icons.draw),
+          ),
+          ButtonSegment(value: Tools.eraser, icon: Icon(Icons.auto_fix_normal))
         ],
-        selected: <Tools>{
-          toolsView
-        },
+        selected: <Tools>{toolsView},
         onSelectionChanged: (Set<Tools> newTool) {
           setState(() {
             toolsView = newTool.first;

@@ -27,17 +27,20 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          CustomPaint(
-            painter: DemoPainter(Colors.green),
-            willChange: true,
-            child: const SizedBox.square(
-              dimension: 200.0,
+      body: Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 25.0),
+            const ToolBar(),
+            CustomPaint(
+              painter: DemoPainter(Colors.green),
+              willChange: true,
+              child: const SizedBox.square(
+                dimension: 200.0,
+              ),
             ),
-          ),
-          const ToolBar(),
-        ],
+          ],
+        ),
       ),
     );
   }
