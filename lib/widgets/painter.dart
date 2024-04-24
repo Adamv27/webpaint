@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:webpaint/utilities/drawing.dart';
 
 class Painter extends CustomPainter {
+  final List<Drawing> drawings;
   final Color rectColor;
-  Painter(this.rectColor);
+  Painter(this.drawings, this.rectColor);
 
   var rect = Rect.fromCenter(
     center: const Offset(100.0, 150.0),
@@ -12,20 +14,24 @@ class Painter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var center = Offset(size.width / 2, size.height / 2);
-    var paint = Paint()
-      ..color = rectColor
-      ..strokeWidth = 9.0;
+    Paint paint = Paint();
 
-    canvas.drawRect(rect, paint);
-    var radius = 9.0;
-    paint = Paint()..color = Colors.blue;
-    canvas.drawCircle(center, radius, paint);
+    for (final drawing in drawings) {
+      for (int i = 0; i < drawing.path.length - 1; ++i) {
+        paint.color = drawing.color;
+        final start = drawing.path[i];
+        final end = drawing.path[i + 1];
+        // ignore: unnecessary_null_comparison
+        if (start != null && end != null) {
+          canvas.drawLine(start, end, paint);
+        }
+      }
+    }
   }
 
   @override
   bool shouldRepaint(covariant Painter oldDelegate) {
-    return rectColor != oldDelegate.rectColor;
+    return true;
   }
 
   @override

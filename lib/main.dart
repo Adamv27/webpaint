@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:webpaint/canvaspage.dart';
+import 'package:webpaint/canvas_page.dart';
 
 void main() {
   runApp(const MyApp());
