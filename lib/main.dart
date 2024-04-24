@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:webpaint/widgets/toolbar.dart';
+import 'package:webpaint/canvaspage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,63 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const MyHomePage(),
+      home: const CanvasPage(),
     );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 25.0),
-            CustomPaint(
-              painter: DemoPainter(Colors.green),
-              willChange: true,
-            ),
-            const ToolBar(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DemoPainter extends CustomPainter {
-  final Color rectColor;
-  DemoPainter(this.rectColor);
-
-  var rect = Rect.fromCenter(
-    center: const Offset(100.0, 150.0),
-    width: 50,
-    height: 75,
-  );
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    var center = Offset(size.width / 2, size.height / 2);
-    var paint = Paint()
-      ..color = rectColor
-      ..strokeWidth = 9.0;
-
-    canvas.drawRect(rect, paint);
-    var radius = 9.0;
-    paint = Paint()..color = Colors.blue;
-    canvas.drawCircle(center, radius, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant DemoPainter oldDelegate) {
-    return rectColor != oldDelegate.rectColor;
-  }
-
-  @override
-  bool? hitTest(Offset position) {
-    return rect.contains(position);
   }
 }
