@@ -13,8 +13,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.black,
+        ),
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.white,
       ),
       home: const MyHomePage(),
     );
@@ -31,14 +34,11 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 25.0),
-            const ToolBar(),
             CustomPaint(
               painter: DemoPainter(Colors.green),
               willChange: true,
-              child: const SizedBox.square(
-                dimension: 200.0,
-              ),
             ),
+            const ToolBar(),
           ],
         ),
       ),

@@ -14,7 +14,20 @@ class _ToolBarState extends State<ToolBar> {
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+
     return SegmentedButton<Tools>(
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.all(50.0),
+          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.selected) ||
+                states.contains(MaterialState.pressed))
+              return Colors.grey.withOpacity(0.9);
+
+            return Colors.white.withOpacity(0.6);
+          }),
+        ),
         showSelectedIcon: false,
         segments: const [
           ButtonSegment(
