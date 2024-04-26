@@ -21,17 +21,14 @@ class Painter extends CustomPainter {
         paint.color = drawing.color;
         final start = drawing.path[i];
         final end = drawing.path[i + 1];
-        // ignore: unnecessary_null_comparison
-        if (start != null && end != null) {
-          canvas.drawLine(start, end, paint);
-        }
+        canvas.drawLine(start, end, paint);
       }
     }
   }
 
   @override
   bool shouldRepaint(covariant Painter oldDelegate) {
-    return true;
+    return drawings != oldDelegate.drawings;
   }
 
   @override
