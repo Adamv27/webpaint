@@ -21,8 +21,7 @@ class _CanvasPageState extends State<CanvasPage> {
   final drawingsStreamController = StreamController<List<Drawing>>.broadcast();
   final currentDrawingStreamController = StreamController<Drawing>.broadcast();
 
-  void onPanStart(DragStartDetails details, Tools tool) {
-    print(tool);
+  void onPanStart(DragStartDetails details, CanvasState canvasState) {
     final box = context.findRenderObject() as RenderBox;
     final point = box.globalToLocal(details.globalPosition);
     currentDrawing = Drawing([point], Colors.green, 1);
@@ -59,7 +58,7 @@ class _CanvasPageState extends State<CanvasPage> {
     CanvasState canvasState = context.watch<CanvasState>();
     return GestureDetector(
       onPanStart: (DragStartDetails details) =>
-          onPanStart(details, canvasState.selectedTool),
+          onPanStart(details, canvasState),
       onPanUpdate: onPanUpdate,
       onPanEnd: onPanEnd,
       child: RepaintBoundary(
@@ -71,7 +70,7 @@ class _CanvasPageState extends State<CanvasPage> {
               stream: currentDrawingStreamController.stream,
               builder: (context, snapshot) {
                 return CustomPaint(
-                  painter: Painter([currentDrawing], Colors.purple),
+                  painter: Painter([currentDrawing]),
                 );
               }),
         ),
@@ -89,7 +88,7 @@ class _CanvasPageState extends State<CanvasPage> {
             stream: drawingsStreamController.stream,
             builder: (context, snapshot) {
               return CustomPaint(
-                painter: Painter(drawings, Colors.purple),
+                painter: Painter(drawings),
               );
             }),
       ),

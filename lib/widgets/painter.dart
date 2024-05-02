@@ -3,8 +3,7 @@ import 'package:webpaint/utilities/drawing.dart';
 
 class Painter extends CustomPainter {
   final List<Drawing> drawings;
-  final Color rectColor;
-  Painter(this.drawings, this.rectColor);
+  Painter(this.drawings);
 
   var rect = Rect.fromCenter(
     center: const Offset(100.0, 150.0),
