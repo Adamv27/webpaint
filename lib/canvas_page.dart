@@ -1,9 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:webpaint/providers/canvas_state.dart';
 import 'package:webpaint/utilities/drawing.dart';
 import 'package:webpaint/widgets/painter.dart';
 import 'package:webpaint/widgets/toolbar.dart';
+import 'package:webpaint/utilities/tools.dart';
 
 class CanvasPage extends StatefulWidget {
   const CanvasPage({super.key});
@@ -19,7 +21,8 @@ class _CanvasPageState extends State<CanvasPage> {
   final drawingsStreamController = StreamController<List<Drawing>>.broadcast();
   final currentDrawingStreamController = StreamController<Drawing>.broadcast();
 
-  void onPanStart(DragStartDetails details) {
+  void onPanStart(DragStartDetails details, Tools tool) {
+    print(tool);
     final box = context.findRenderObject() as RenderBox;
     final point = box.globalToLocal(details.globalPosition);
     currentDrawing = Drawing([point], Colors.green, 1);
@@ -46,15 +49,17 @@ class _CanvasPageState extends State<CanvasPage> {
         children: [
           buildAllDrawings(context),
           buildCurrentPath(context),
-          const ToolBar(),
+          ToolBar(),
         ],
       ),
     );
   }
 
   GestureDetector buildCurrentPath(BuildContext context) {
+    CanvasState canvasState = context.watch<CanvasState>();
     return GestureDetector(
-      onPanStart: onPanStart,
+      onPanStart: (DragStartDetails details) =>
+          onPanStart(details, canvasState.selectedTool),
       onPanUpdate: onPanUpdate,
       onPanEnd: onPanEnd,
       child: RepaintBoundary(

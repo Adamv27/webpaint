@@ -1,32 +1,12 @@
 import "package:flutter/material.dart";
+import "package:webpaint/providers/canvas_state.dart";
+import "package:webpaint/utilities/tools.dart";
+import 'package:provider/provider.dart';
 
-class ToolBar extends StatefulWidget {
-  const ToolBar({super.key});
-
-  @override
-  State<ToolBar> createState() => _ToolBarState();
-}
-
-enum Tools {
-  pointer(icon: Icon(Icons.navigation)),
-  line(icon: Icon(Icons.horizontal_rule)),
-  square(icon: Icon(Icons.crop_square)),
-  circle(icon: Icon(Icons.circle_outlined)),
-  pencil(icon: Icon(Icons.draw)),
-  eraser(icon: Icon(Icons.auto_fix_normal));
-
-  const Tools({
-    required this.icon,
-  });
-
-  final Icon icon;
-}
-
-class _ToolBarState extends State<ToolBar> {
-  Tools selectedTool = Tools.pointer;
-
+class ToolBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    CanvasState canvasState = context.watch<CanvasState>();
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Container(
@@ -39,14 +19,21 @@ class _ToolBarState extends State<ToolBar> {
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            children: [for (var tool in Tools.values) buildIconButton(tool)],
+            children: [
+              for (var tool in Tools.values)
+                buildIconButton(
+                  tool,
+                  canvasState,
+                )
+            ],
           ),
         ),
       ),
     );
   }
 
-  Container buildIconButton(Tools tool) {
+  Container buildIconButton(Tools tool, CanvasState canvasState) {
+    final selectedTool = canvasState.selectedTool;
     return Container(
       decoration: BoxDecoration(
         color: selectedTool == tool ? Colors.blueAccent.shade200 : null,
@@ -58,11 +45,7 @@ class _ToolBarState extends State<ToolBar> {
           highlightColor: Colors.transparent,
           hoverColor: Colors.transparent,
           icon: tool.icon,
-          onPressed: () {
-            setState(() {
-              selectedTool = tool;
-            });
-          },
+          onPressed: () => canvasState.setSelectedTool(tool),
         ),
       ),
     );
