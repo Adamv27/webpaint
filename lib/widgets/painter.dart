@@ -14,10 +14,12 @@ class Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint();
+    paint.strokeCap = StrokeCap.round;
 
     for (final drawing in drawings) {
       for (int i = 0; i < drawing.path.length - 1; ++i) {
         paint.color = drawing.color;
+        paint.strokeWidth = drawing.width;
         final start = drawing.path[i];
         final end = drawing.path[i + 1];
         canvas.drawLine(start, end, paint);

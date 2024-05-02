@@ -5,7 +5,6 @@ import 'package:webpaint/providers/canvas_state.dart';
 import 'package:webpaint/utilities/drawing.dart';
 import 'package:webpaint/widgets/painter.dart';
 import 'package:webpaint/widgets/toolbar.dart';
-import 'package:webpaint/utilities/tools.dart';
 
 class CanvasPage extends StatefulWidget {
   const CanvasPage({super.key});
@@ -24,15 +23,15 @@ class _CanvasPageState extends State<CanvasPage> {
   void onPanStart(DragStartDetails details, CanvasState canvasState) {
     final box = context.findRenderObject() as RenderBox;
     final point = box.globalToLocal(details.globalPosition);
-    currentDrawing = Drawing([point], Colors.green, 1);
+    currentDrawing = canvasState.selectedTool.startDrawing(canvasState, point);
   }
 
-  void onPanUpdate(DragUpdateDetails details) {
+  void onPanUpdate(DragUpdateDetails details, CanvasState canvasState) {
     final box = context.findRenderObject() as RenderBox;
     final point = box.globalToLocal(details.globalPosition);
 
     final path = List<Offset>.from(currentDrawing.path)..add(point);
-    currentDrawing = Drawing(path, Colors.green, 1);
+    currentDrawing = canvasState.selectedTool.updateDrawing(canvasState, path);
     currentDrawingStreamController.add(currentDrawing);
   }
 
@@ -48,7 +47,7 @@ class _CanvasPageState extends State<CanvasPage> {
         children: [
           buildAllDrawings(context),
           buildCurrentPath(context),
-          ToolBar(),
+          const ToolBar(),
         ],
       ),
     );
@@ -59,7 +58,8 @@ class _CanvasPageState extends State<CanvasPage> {
     return GestureDetector(
       onPanStart: (DragStartDetails details) =>
           onPanStart(details, canvasState),
-      onPanUpdate: onPanUpdate,
+      onPanUpdate: (DragUpdateDetails details) =>
+          onPanUpdate(details, canvasState),
       onPanEnd: onPanEnd,
       child: RepaintBoundary(
         child: Container(

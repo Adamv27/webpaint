@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:webpaint/utilities/tools.dart';
+import 'package:webpaint/tools/pencil.dart';
+import 'package:webpaint/tools/tool.dart';
 
 class CanvasState extends ChangeNotifier {
-  Tools selectedTool = Tools.pencil;
+  Tool selectedTool = Pencil();
+  Color selectedColor = Colors.black;
+  double lineThickness = 5;
 
-  void setSelectedTool(tool) {
+  void setSelectedTool(Tool tool) {
     selectedTool = tool;
     notifyListeners();
   }

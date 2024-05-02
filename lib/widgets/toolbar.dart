@@ -1,12 +1,30 @@
 import "package:flutter/material.dart";
 import "package:webpaint/providers/canvas_state.dart";
-import "package:webpaint/utilities/tools.dart";
+import "package:webpaint/tools/circle.dart";
+import "package:webpaint/tools/eraser.dart";
+import "package:webpaint/tools/line.dart";
+import "package:webpaint/tools/pencil.dart";
+import "package:webpaint/tools/pointer.dart";
+import "package:webpaint/tools/square.dart";
+import "package:webpaint/tools/tool.dart";
 import 'package:provider/provider.dart';
 
 class ToolBar extends StatelessWidget {
+  const ToolBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     CanvasState canvasState = context.watch<CanvasState>();
+
+    List<Tool> tools = [
+      Pointer(),
+      Line(),
+      Square(),
+      Circle(),
+      Pencil(),
+      Eraser()
+    ];
+
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Container(
@@ -20,7 +38,7 @@ class ToolBar extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              for (var tool in Tools.values)
+              for (var tool in tools)
                 buildIconButton(
                   tool,
                   canvasState,
@@ -32,12 +50,13 @@ class ToolBar extends StatelessWidget {
     );
   }
 
-  Container buildIconButton(Tools tool, CanvasState canvasState) {
+  Container buildIconButton(Tool tool, CanvasState canvasState) {
     final selectedTool = canvasState.selectedTool;
+    bool isSelected = selectedTool.runtimeType == tool.runtimeType;
     return Container(
       decoration: BoxDecoration(
-        color: selectedTool == tool ? Colors.blueAccent.shade200 : null,
-        borderRadius: selectedTool == tool ? BorderRadius.circular(5) : null,
+        color: isSelected ? Colors.blueAccent.shade200 : null,
+        borderRadius: isSelected ? BorderRadius.circular(5) : null,
       ),
       child: FittedBox(
         child: IconButton(
