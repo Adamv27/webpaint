@@ -8,13 +8,25 @@ class Square extends Tool {
 
   @override
   Drawing startDrawing(CanvasState canvasState, Offset point) {
-    // TODO: implement startDrawing
-    throw UnimplementedError();
+    return Drawing(
+      [point],
+      canvasState.selectedColor,
+      canvasState.lineThickness,
+    );
   }
 
   @override
   Drawing updateDrawing(CanvasState canvasState, List<Offset> path) {
-    // TODO: implement updateDraing
-    throw UnimplementedError();
+    Offset start = path[0];
+    Offset end = path[path.length - 1];
+
+    Offset corner1 = Offset(end.dx, start.dy);
+    Offset corner2 = Offset(start.dx, end.dy);
+    return Drawing(
+      // Start and end are on opposite corners
+      [start, corner1, end, corner2, start],
+      canvasState.selectedColor,
+      canvasState.lineThickness,
+    );
   }
 }
