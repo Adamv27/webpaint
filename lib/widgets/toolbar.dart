@@ -7,55 +7,64 @@ class ToolBar extends StatefulWidget {
   State<ToolBar> createState() => _ToolBarState();
 }
 
-enum Tools { pointer, line, square, circle, pencil, eraser }
+enum Tools {
+  pointer(icon: Icon(Icons.navigation)),
+  line(icon: Icon(Icons.horizontal_rule)),
+  square(icon: Icon(Icons.crop_square)),
+  circle(icon: Icon(Icons.circle_outlined)),
+  pencil(icon: Icon(Icons.draw)),
+  eraser(icon: Icon(Icons.auto_fix_normal));
+
+  const Tools({
+    required this.icon,
+  });
+
+  final Icon icon;
+}
 
 class _ToolBarState extends State<ToolBar> {
-  Tools toolsView = Tools.pointer;
+  Tools selectedTool = Tools.pointer;
 
   @override
   Widget build(BuildContext context) {
-    return SegmentedButton<Tools>(
-        style: ButtonStyle(
-          elevation: MaterialStateProperty.all(50.0),
-          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-            if (states.contains(MaterialState.selected) ||
-                states.contains(MaterialState.pressed)) {
-              return Colors.grey.withOpacity(0.9);
-            }
-
-            return Colors.white.withOpacity(0.6);
-          }),
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: Container(
+        alignment: Alignment.topCenter,
+        height: 40,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [for (var tool in Tools.values) buildIconButton(tool)],
+          ),
         ),
-        showSelectedIcon: false,
-        segments: const [
-          ButtonSegment(
-            value: Tools.pointer,
-            icon: Icon(Icons.navigation),
-          ),
-          ButtonSegment(
-            value: Tools.line,
-            icon: Icon(Icons.horizontal_rule),
-          ),
-          ButtonSegment(
-            value: Tools.square,
-            icon: Icon(Icons.crop_square),
-          ),
-          ButtonSegment(
-            value: Tools.circle,
-            icon: Icon(Icons.circle_outlined),
-          ),
-          ButtonSegment(
-            value: Tools.pencil,
-            icon: Icon(Icons.draw),
-          ),
-          ButtonSegment(value: Tools.eraser, icon: Icon(Icons.auto_fix_normal))
-        ],
-        selected: <Tools>{toolsView},
-        onSelectionChanged: (Set<Tools> newTool) {
-          setState(() {
-            toolsView = newTool.first;
-          });
-        });
+      ),
+    );
+  }
+
+  Container buildIconButton(Tools tool) {
+    return Container(
+      decoration: BoxDecoration(
+        color: selectedTool == tool ? Colors.blueAccent.shade200 : null,
+        borderRadius: selectedTool == tool ? BorderRadius.circular(5) : null,
+      ),
+      child: FittedBox(
+        child: IconButton(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          icon: tool.icon,
+          onPressed: () {
+            setState(() {
+              selectedTool = tool;
+            });
+          },
+        ),
+      ),
+    );
   }
 }
