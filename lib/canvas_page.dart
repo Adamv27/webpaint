@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:webpaint/providers/canvas_state.dart';
+import 'package:webpaint/tools/circle.dart';
 import 'package:webpaint/utilities/drawing.dart';
 import 'package:webpaint/widgets/painter.dart';
 import 'package:webpaint/widgets/toolbar.dart';
@@ -16,6 +17,7 @@ class CanvasPage extends StatefulWidget {
 class _CanvasPageState extends State<CanvasPage> {
   List<Drawing> drawings = <Drawing>[];
   Drawing currentDrawing = Drawing([], Colors.green, 1);
+  Offset initialClick = Offset.zero;
 
   final drawingsStreamController = StreamController<List<Drawing>>.broadcast();
   final currentDrawingStreamController = StreamController<Drawing>.broadcast();
@@ -23,6 +25,7 @@ class _CanvasPageState extends State<CanvasPage> {
   void onPanStart(DragStartDetails details, CanvasState canvasState) {
     final box = context.findRenderObject() as RenderBox;
     final point = box.globalToLocal(details.globalPosition);
+    initialClick = point;
     currentDrawing = canvasState.selectedTool.startDrawing(canvasState, point);
   }
 
@@ -31,6 +34,9 @@ class _CanvasPageState extends State<CanvasPage> {
     final point = box.globalToLocal(details.globalPosition);
 
     final path = List<Offset>.from(currentDrawing.path)..add(point);
+    if (canvasState.selectedTool.runtimeType == Circle) {
+      path.insert(0, initialClick);
+    }
     currentDrawing = canvasState.selectedTool.updateDrawing(canvasState, path);
     currentDrawingStreamController.add(currentDrawing);
   }
